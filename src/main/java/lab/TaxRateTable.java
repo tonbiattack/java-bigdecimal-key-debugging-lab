@@ -9,10 +9,14 @@ public final class TaxRateTable {
     private final Map<BigDecimal, BigDecimal> rates = new HashMap<>();
 
     public void register(BigDecimal rate, BigDecimal taxPercent) {
-        rates.put(rate, taxPercent);
+        rates.put(canonicalize(rate), taxPercent);
     }
 
     public Optional<BigDecimal> findTaxPercent(BigDecimal rate) {
-        return Optional.ofNullable(rates.get(rate));
+        return Optional.ofNullable(rates.get(canonicalize(rate)));
+    }
+
+    private static BigDecimal canonicalize(BigDecimal rate) {
+        return rate.stripTrailingZeros();
     }
 }
